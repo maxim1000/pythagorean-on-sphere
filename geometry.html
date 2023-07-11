@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>Pythagorean on a sphere</title>
+		<style>
+			html, body {
+				margin: 0;
+				height: 100%;
+				overflow: hidden;
+			}
+			body {
+				display: flex;
+			}
+			#scene
+			{
+				flex: 1;
+				width: 100%;
+				height: 100%;
+			}
+			#explanation
+			{
+				position: absolute;
+				width: 30%;
+				padding: 1em;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="scene"></canvas>
+		<div id="panel">
+			<table>
+				<tbody>
+				</tbody>
+			</table>
+			<button id="startButton">Start</button>
+			<button id="prevButton">Previous Step</button>
+			<button id="nextButton">Next Step</button>
+		</div>
+		<div id="explanation"/>
+		<script type="importmap">
+			{
+				"imports":{
+					"three": "https://unpkg.com/three@0.151.3/build/three.module.js",
+					"three/addons/": "https://unpkg.com/three@0.151.3/examples/jsm/"
+				}
+			}
+		</script>
+		<script type="module">
+			import * as THREE from 'three';
+			import {ArcballControls} from 'three/addons/controls/ArcballControls.js';
+			function animate(){
+				requestAnimationFrame(animate);
+				const sceneElement=document.getElementById('scene');
+				const width=sceneElement.clientWidth;
+				const height=sceneElement.clientHeight;
+				renderer.setSize(width,height,false);
+				camera.aspect=width/height;
+				camera.updateProjectionMatrix();
+				renderer.render(scene,camera);
+			}
+			const sceneElement=document.getElementById('scene');
+			const scene=new THREE.Scene();
+			const camera=new THREE.PerspectiveCamera(
+				75,
+				sceneElement.clientWidth/sceneElement.clientHeight,
+				0.1,
+				1000);
+			const renderer=new THREE.WebGLRenderer({canvas:sceneElement});
+			renderer.setClearColor(new THREE.Color(1,1,1));
+			const light=new THREE.DirectionalLight(0xffffff,0.5);
+			light.position.set(0,1,1);
+			scene.add(light);
+			scene.add(new THREE.AmbientLight(0x808080));
+			camera.position.z=2;
+			const controls=new ArcballControls(camera,renderer.domElement);
+			controls.update();
+			int step=-1;
+			function clearScene()
+			{
+				//todo
+			}
+			function showStep()
+			{
+				//todo: update explanation
+				//todo: update the 3D view
+				//todo: update prev/next buttons
+			}
+			document.getElementById("startButton").onclick=function()
+			{
+				step=0;
+				showStep();
+			};
+			document.getElementById("prevButton").onclick=function()
+			{
+				--step;
+				showStep();
+			};
+			document.getElementById("nextButton").onclick=function()
+			{
+				++step;
+				showStep();
+			};
+			document.getElementById("prevButton").disabled=true;
+			document.getElementById("nextButton").disabled=true;
+			animate();
+		</script>
+	</body>
+</html>
