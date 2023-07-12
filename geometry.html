@@ -80,7 +80,7 @@
 			light.position.set(0,1,1);
 			scene.add(light);
 			scene.add(new THREE.AmbientLight(0x808080));
-			camera.position.z=2;
+			camera.position.set(1,1,2);
 			const controls=new ArcballControls(camera,renderer.domElement);
 			controls.update();
 			let step=-1;
