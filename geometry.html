@@ -41,7 +41,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<button id="startButton">Start</button>
+			<button id="startButton">Update</button>
 			<button id="prevButton">Previous Step</button>
 			<button id="nextButton">Next Step</button>
 		</div>
@@ -83,7 +83,7 @@
 			camera.position.set(1,1,2);
 			const controls=new ArcballControls(camera,renderer.domElement);
 			controls.update();
-			let step=-1;
+			let step=0;
 			var alpha;
 			var beta;
 			var sphere;
@@ -380,7 +380,7 @@
 				document.getElementById("prevButton").disabled=(step<=0);
 				document.getElementById("nextButton").disabled=(step>=6);
 			}
-			document.getElementById("startButton").onclick=function()
+			function restart()
 			{
 				clearScene();
 				alpha=Number(document.getElementById("alpha").value)*Math.PI/180;
@@ -388,7 +388,8 @@
 				recreateGeometry();
 				step=0;
 				showStep();
-			};
+			}
+			document.getElementById("startButton").onclick=restart;
 			document.getElementById("prevButton").onclick=function()
 			{
 				--step;
@@ -401,6 +402,7 @@
 			};
 			document.getElementById("prevButton").disabled=true;
 			document.getElementById("nextButton").disabled=true;
+			restart();
 			animate();
 		</script>
 	</body>
