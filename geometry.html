@@ -31,6 +31,14 @@
 		<div id="panel">
 			<table>
 				<tbody>
+					<tr>
+						<td>alpha</td>
+						<td><input id="alpha" type="number" step="0.01" value="20"/><td>
+					</tr>
+					<tr>
+						<td>beta</td>
+						<td><input id="beta" type="number" step="0.01" value="10"/><td>
+					</tr>
 				</tbody>
 			</table>
 			<button id="startButton">Start</button>
@@ -75,19 +83,119 @@
 			camera.position.z=2;
 			const controls=new ArcballControls(camera,renderer.domElement);
 			controls.update();
-			int step=-1;
+			let step=-1;
+			var alpha;
+			var beta;
+			var sphere;
+			var leg1;
+			var leg2;
+			var hypotenuse;
+			var orthogonalityMarker;
 			function clearScene()
 			{
-				//todo
+				scene.remove(sphere);
+				scene.remove(leg1);
+				scene.remove(leg2);
+				scene.remove(hypotenuse);
+				scene.remove(orthogonalityMarker);
+			}
+			function getPointOnSphere(azimuth,polar)
+			{
+				return new THREE.Vector3(
+					Math.sin(polar)*Math.cos(azimuth),
+					Math.sin(polar)*Math.sin(azimuth),
+					Math.cos(polar));
+			}
+			function selectOrthogonalDirection(vector)
+			{
+				let result;
+				if(Math.abs(vector[0])<Math.abs(vector[1]))
+					result=new THREE.Vector3(1,0,0);
+				else
+					result=new THREE.Vector3(0,1,0);
+				result.cross(vector);
+				return result;
+			}
+			function createArc(startAzimuth,startPolar,finishAzimuth,finishPolar,lineColor)
+			{
+				let points=[
+					getPointOnSphere(startAzimuth,startPolar),
+					getPointOnSphere(finishAzimuth,finishPolar)];
+				while(true)
+				{
+					let newPoints=[points[0]];
+					for(let c=1;c<points.length;++c)
+					{
+						if(points[c-1].distanceTo(points[c])>0.05)
+						{//add the middle point
+							let middle=new THREE.Vector3(0,0,0);
+							middle.lerpVectors(points[c-1],points[c],0.5);
+							middle.normalize();
+							if(middle.length()<0.5)
+							{//must be a degenerate case
+								middle=selectOrthogonalDirection(points[c]);
+								middle.normalize();
+							}
+							newPoints.push(middle);
+						}
+						newPoints.push(points[c]);
+					}
+					if(newPoints.length==points.length)
+						break;
+					points=newPoints;
+				}
+				return new THREE.Line(
+					new THREE.BufferGeometry().setFromPoints(points),
+					new THREE.LineBasicMaterial({color:lineColor}));
+			}
+			function createOrthogonalityMarker(markerColor)
+			{
+				const size=0.03;
+				let points=[
+					new THREE.Vector3(size,0,1),
+					new THREE.Vector3(size,size,1),
+					new THREE.Vector3(0,size,1)];
+				return new THREE.Line(
+					new THREE.BufferGeometry().setFromPoints(points),
+					new THREE.LineBasicMaterial({color:markerColor}));
+			}
+			function recreateGeometry()
+			{
+				sphere=new THREE.Mesh(
+					new THREE.SphereGeometry(0.999,64,32),
+					new THREE.MeshLambertMaterial({color:0xffffff}));
+				leg1=createArc(0,0,0,alpha,0x0000ff);
+				leg2=createArc(0,0,Math.PI/2,beta,0x00ff00);
+				hypotenuse=createArc(0,alpha,Math.PI/2,beta,0xff0000);
+				orthogonalityMarker=createOrthogonalityMarker(0x000000);
 			}
 			function showStep()
 			{
-				//todo: update explanation
-				//todo: update the 3D view
-				//todo: update prev/next buttons
+				if(step==0)
+				{//problem definition
+					document.getElementById("explanation").innerHTML=
+						"<h4>Spherical Analog of the Pythagorean Theorem</h4>"+
+						"<p>"+
+						"We have a sphere of radius 1. Also there is a right "+
+						"triangle on this sphere (its sides are arcs on the "+
+						"sphere). The legs (blue and green) are known, we "+
+						"need to find the hypotenuse (red)."+
+						"<p>";
+					scene.add(sphere);
+					scene.add(leg1);
+					scene.add(leg2);
+					scene.add(hypotenuse);
+					scene.add(orthogonalityMarker);
+				}
+				document.getElementById("prevButton").disabled=(step<=0);
+				document.getElementById("nextButton").disabled=(step>=0);
 			}
 			document.getElementById("startButton").onclick=function()
 			{
+				clearScene();
+				alpha=Number(document.getElementById("alpha").value)*Math.PI/180;
+				beta=Number(document.getElementById("beta").value)*Math.PI/180;
+				recreateGeometry();
 				step=0;
 				showStep();
 			};
