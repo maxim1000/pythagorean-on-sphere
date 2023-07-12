@@ -335,8 +335,32 @@
 					scene.add(vector1);
 					scene.add(vector2);
 				}
+				else if(step==5)
+				{//dot product from the coordinates
+					document.getElementById("explanation").innerHTML=
+						"<h4>Dot product calculation</h4>"+
+						"<p>"+
+						"Since we have the coordinates of both vector, "+
+						"we can use them to calculate the dot product:"+
+						"</p>"+
+						"<ul>"+
+						"<li>vector1*vector2=x1*x2+y1*y2+z1*z2</li>"+
+						"<li>vector1*vector2=sin(alpha)*0+0*sin(beta)+cos(alpha)*cos(beta)</li>"+
+						"<li>vector1*vector2=cos(alpha)*cos(beta)</li>"+
+						"</ul>";
+					scene.add(sphere);
+					scene.add(leg1);
+					scene.add(leg2);
+					scene.add(hypotenuse);
+					scene.add(orthogonalityMarker);
+					scene.add(xAxis);
+					scene.add(yAxis);
+					scene.add(zAxis);
+					scene.add(vector1);
+					scene.add(vector2);
+				}
 				document.getElementById("prevButton").disabled=(step<=0);
-				document.getElementById("nextButton").disabled=(step>=4);
+				document.getElementById("nextButton").disabled=(step>=5);
 			}
 			document.getElementById("startButton").onclick=function()
 			{
