@@ -94,6 +94,7 @@
 			var xAxis;
 			var yAxis;
 			var zAxis;
+			var vector1;
 			function clearScene()
 			{
 				scene.remove(sphere);
@@ -104,6 +105,7 @@
 				scene.remove(xAxis);
 				scene.remove(yAxis);
 				scene.remove(zAxis);
+				scene.remove(vector1);
 			}
 			function getPointOnSphere(azimuth,polar)
 			{
@@ -185,6 +187,15 @@
 					new THREE.BufferGeometry().setFromPoints(points),
 					new THREE.LineBasicMaterial({color:axisColor,depthFunc:THREE.AlwaysDepth}));
 			}
+			function createRadialVector(azimuth,polar,vectorColor)
+			{
+				let points=[
+					new THREE.Vector3(0,0,0),
+					getPointOnSphere(azimuth,polar)];
+				return new THREE.Line(
+					new THREE.BufferGeometry().setFromPoints(points),
+					new THREE.LineBasicMaterial({color:vectorColor,depthFunc:THREE.AlwaysDepth}));
+			}
 			function recreateGeometry()
 			{
 				sphere=createTransparentSphere(0.999);
@@ -195,6 +206,7 @@
 				xAxis=createAxis(0,0x0000ff);
 				yAxis=createAxis(1,0x00ff00);
 				zAxis=createAxis(2,0xff0000);
+				vector1=createRadialVector(0,alpha,0x000000);
 			}
 			function showStep()
 			{
@@ -216,6 +228,7 @@
 					scene.remove(xAxis);
 					scene.remove(yAxis);
 					scene.remove(zAxis);
+					scene.remove(vector1);
 				}
 				else if(step==1)
 				{//coordinate system
@@ -238,9 +251,34 @@
 					scene.add(xAxis);
 					scene.add(yAxis);
 					scene.add(zAxis);
+					scene.remove(vector1);
+				}
+				else if(step==2)
+				{//leg1 vector
+					document.getElementById("explanation").innerHTML=
+						"<h4>First leg endpoint vector coordinates</h4>"+
+						"<p>"+
+						"In this coordinate system the vector from the "+
+						"sphere centre to the endpoint of the first leg "+
+						"will have the following coordinates:"+
+						"<p>"+
+						"<ul>"+
+						"<li>X=sin(alpha)</li>"+
+						"<li>Y=0</li>"+
+						"<li>Z=cos(alpha)</li>"+
+						"</ul>";
+					scene.add(sphere);
+					scene.add(leg1);
+					scene.add(leg2);
+					scene.add(hypotenuse);
+					scene.add(orthogonalityMarker);
+					scene.add(xAxis);
+					scene.add(yAxis);
+					scene.add(zAxis);
+					scene.add(vector1);
 				}
 				document.getElementById("prevButton").disabled=(step<=0);
-				document.getElementById("nextButton").disabled=(step>=1);
+				document.getElementById("nextButton").disabled=(step>=2);
 			}
 			document.getElementById("startButton").onclick=function()
 			{
