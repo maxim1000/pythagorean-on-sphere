@@ -32,11 +32,11 @@
 			<table>
 				<tbody>
 					<tr>
-						<td>alpha</td>
+						<td>leg1</td>
 						<td><input id="alpha" type="number" step="0.01" value="20"/><td>
 					</tr>
 					<tr>
-						<td>beta</td>
+						<td>leg2</td>
 						<td><input id="beta" type="number" step="0.01" value="10"/><td>
 					</tr>
 				</tbody>
@@ -273,9 +273,9 @@
 						"will have the following coordinates:"+
 						"</p>"+
 						"<ul>"+
-						"<li>X=sin(alpha)</li>"+
+						"<li>X=sin(leg1)</li>"+
 						"<li>Y=0</li>"+
-						"<li>Z=cos(alpha)</li>"+
+						"<li>Z=cos(leg1)</li>"+
 						"</ul>";
 					scene.add(sphere);
 					scene.add(leg1);
@@ -298,8 +298,8 @@
 						"</p>"+
 						"<ul>"+
 						"<li>X=0</li>"+
-						"<li>Y=sin(beta)</li>"+
-						"<li>Z=cos(alpha)</li>"+
+						"<li>Y=sin(leg2)</li>"+
+						"<li>Z=cos(leg2)</li>"+
 						"</ul>";
 					scene.add(sphere);
 					scene.add(leg1);
@@ -345,8 +345,8 @@
 						"</p>"+
 						"<ul>"+
 						"<li>vector1*vector2=x1*x2+y1*y2+z1*z2</li>"+
-						"<li>vector1*vector2=sin(alpha)*0+0*sin(beta)+cos(alpha)*cos(beta)</li>"+
-						"<li>vector1*vector2=cos(alpha)*cos(beta)</li>"+
+						"<li>vector1*vector2=sin(leg1)*0+0*sin(leg2)+cos(leg1)*cos(leg2)</li>"+
+						"<li>vector1*vector2=cos(leg1)*cos(leg2)</li>"+
 						"</ul>";
 					scene.add(sphere);
 					scene.add(leg1);
@@ -364,7 +364,7 @@
 					document.getElementById("explanation").innerHTML=
 						"<h4>Final formula</h4>"+
 						"<p>"+
-						"cos(hypotenuse)=cos(alpha)*cos(beta)"+
+						"cos(hypotenuse)=cos(leg1)*cos(leg2)"+
 						"</p>";
 					scene.add(sphere);
 					scene.add(leg1);
