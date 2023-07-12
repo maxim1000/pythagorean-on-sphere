@@ -359,8 +359,26 @@
 					scene.add(vector1);
 					scene.add(vector2);
 				}
+				else if(step==6)
+				{//final formula
+					document.getElementById("explanation").innerHTML=
+						"<h4>Final formula</h4>"+
+						"<p>"+
+						"cos(hypotenuse)=cos(alpha)*cos(beta)"+
+						"</p>";
+					scene.add(sphere);
+					scene.add(leg1);
+					scene.add(leg2);
+					scene.add(hypotenuse);
+					scene.add(orthogonalityMarker);
+					scene.add(xAxis);
+					scene.add(yAxis);
+					scene.add(zAxis);
+					scene.add(vector1);
+					scene.add(vector2);
+				}
 				document.getElementById("prevButton").disabled=(step<=0);
-				document.getElementById("nextButton").disabled=(step>=5);
+				document.getElementById("nextButton").disabled=(step>=6);
 			}
 			document.getElementById("startButton").onclick=function()
 			{
