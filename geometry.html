@@ -245,7 +245,7 @@
 						"<h4>Coordinate system</h4>"+
 						"<p>"+
 						"Let's introduce a coordinate system:"+
-						"<p>"+
+						"</p>"+
 						"<ul>"+
 						"<li>origin - centre of the sphere</li>"+
 						"<li><font color='blue'>X</font> - the direction of the first leg at its start</li>"+
@@ -271,7 +271,7 @@
 						"In this coordinate system the vector from the "+
 						"sphere centre to the endpoint of the first leg "+
 						"will have the following coordinates:"+
-						"<p>"+
+						"</p>"+
 						"<ul>"+
 						"<li>X=sin(alpha)</li>"+
 						"<li>Y=0</li>"+
@@ -295,7 +295,7 @@
 						"<p>"+
 						"For the second leg the vector will have the "+
 						"following coordinates:"+
-						"<p>"+
+						"</p>"+
 						"<ul>"+
 						"<li>X=0</li>"+
 						"<li>Y=sin(beta)</li>"+
@@ -312,8 +312,31 @@
 					scene.add(vector1);
 					scene.add(vector2);
 				}
+				else if(step==4)
+				{//hypotenuse length through dot product
+					document.getElementById("explanation").innerHTML=
+						"<h4>Hypotenuse length</h4>"+
+						"<p>"+
+						"Hypotenuse length is the angle between these two "+
+						"vectors. We can get cosine of the angle from dot "+
+						"product of the vectors:"+
+						"</p>"+
+						"<ul>"+
+						"<li>cos(hypotenuse)=vector1*vector2</li>"+
+						"</ul>";
+					scene.add(sphere);
+					scene.add(leg1);
+					scene.add(leg2);
+					scene.add(hypotenuse);
+					scene.add(orthogonalityMarker);
+					scene.add(xAxis);
+					scene.add(yAxis);
+					scene.add(zAxis);
+					scene.add(vector1);
+					scene.add(vector2);
+				}
 				document.getElementById("prevButton").disabled=(step<=0);
-				document.getElementById("nextButton").disabled=(step>=3);
+				document.getElementById("nextButton").disabled=(step>=4);
 			}
 			document.getElementById("startButton").onclick=function()
 			{
