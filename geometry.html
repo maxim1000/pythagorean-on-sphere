@@ -91,6 +91,9 @@
 			var leg2;
 			var hypotenuse;
 			var orthogonalityMarker;
+			var xAxis;
+			var yAxis;
+			var zAxis;
 			function clearScene()
 			{
 				scene.remove(sphere);
@@ -98,6 +101,9 @@
 				scene.remove(leg2);
 				scene.remove(hypotenuse);
 				scene.remove(orthogonalityMarker);
+				scene.remove(xAxis);
+				scene.remove(yAxis);
+				scene.remove(zAxis);
 			}
 			function getPointOnSphere(azimuth,polar)
 			{
@@ -146,7 +152,7 @@
 				}
 				return new THREE.Line(
 					new THREE.BufferGeometry().setFromPoints(points),
-					new THREE.LineBasicMaterial({color:lineColor}));
+					new THREE.LineBasicMaterial({color:lineColor,depthFunc:THREE.AlwaysDepth}));
 			}
 			function createOrthogonalityMarker(markerColor)
 			{
@@ -157,24 +163,45 @@
 					new THREE.Vector3(0,size,1)];
 				return new THREE.Line(
 					new THREE.BufferGeometry().setFromPoints(points),
-					new THREE.LineBasicMaterial({color:markerColor}));
+					new THREE.LineBasicMaterial({color:markerColor,depthFunc:THREE.AlwaysDepth}));
+			}
+			function createTransparentSphere(radius)
+			{
+				let material=new THREE.MeshLambertMaterial({color:0xffffff,depthFunc:THREE.AlwaysDepth});
+				material.opacity=0.5;
+				material.transparent=1;
+				return new THREE.Mesh(
+					new THREE.SphereGeometry(radius,64,32),
+					material);
+			}
+			function createAxis(axisIndex,axisColor)
+			{
+				const size=0.3;
+				let points=[
+					new THREE.Vector3(0,0,0),
+					new THREE.Vector3(0,0,0)];
+				points[1].setComponent(axisIndex,size);
+				return new THREE.Line(
+					new THREE.BufferGeometry().setFromPoints(points),
+					new THREE.LineBasicMaterial({color:axisColor,depthFunc:THREE.AlwaysDepth}));
 			}
 			function recreateGeometry()
 			{
-				sphere=new THREE.Mesh(
-					new THREE.SphereGeometry(0.999,64,32),
-					new THREE.MeshLambertMaterial({color:0xffffff}));
+				sphere=createTransparentSphere(0.999);
 				leg1=createArc(0,0,0,alpha,0x0000ff);
 				leg2=createArc(0,0,Math.PI/2,beta,0x00ff00);
 				hypotenuse=createArc(0,alpha,Math.PI/2,beta,0xff0000);
 				orthogonalityMarker=createOrthogonalityMarker(0x000000);
+				xAxis=createAxis(0,0x0000ff);
+				yAxis=createAxis(1,0x00ff00);
+				zAxis=createAxis(2,0xff0000);
 			}
 			function showStep()
 			{
 				if(step==0)
 				{//problem definition
 					document.getElementById("explanation").innerHTML=
-						"<h4>Spherical Analog of the Pythagorean Theorem</h4>"+
+						"<h4>Spherical analog of the Pythagorean theorem</h4>"+
 						"<p>"+
 						"We have a sphere of radius 1. Also there is a right "+
 						"triangle on this sphere (its sides are arcs on the "+
@@ -186,9 +213,34 @@
 					scene.add(leg2);
 					scene.add(hypotenuse);
 					scene.add(orthogonalityMarker);
+					scene.remove(xAxis);
+					scene.remove(yAxis);
+					scene.remove(zAxis);
+				}
+				else if(step==1)
+				{//coordinate system
+					document.getElementById("explanation").innerHTML=
+						"<h4>Coordinate system</h4>"+
+						"<p>"+
+						"Let's introduce a coordinate system:"+
+						"<p>"+
+						"<ul>"+
+						"<li>origin - centre of the sphere</li>"+
+						"<li><font color='blue'>X</font> - the direction of the first leg at its start</li>"+
+						"<li><font color='green'>Y</font> - the direction of the second leg at its start</li>"+
+						"<li><font color='red'>Z</font> - from the centre to the right angle of the triangle</li>"+
+						"</ul>";
+					scene.add(sphere);
+					scene.add(leg1);
+					scene.add(leg2);
+					scene.add(hypotenuse);
+					scene.add(orthogonalityMarker);
+					scene.add(xAxis);
+					scene.add(yAxis);
+					scene.add(zAxis);
 				}
 				document.getElementById("prevButton").disabled=(step<=0);
-				document.getElementById("nextButton").disabled=(step>=0);
+				document.getElementById("nextButton").disabled=(step>=1);
 			}
 			document.getElementById("startButton").onclick=function()
 			{
